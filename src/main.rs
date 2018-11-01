@@ -53,7 +53,7 @@ fn eval_r(code: & mut &str) -> String {
                 num = digit + num * 10;
             } else {
                 break;
-            }            
+            }
         }
         lines.push_str(&format!("    mov r0, {}\n", num));
         lines.push_str("    push r0\n");
@@ -68,6 +68,27 @@ fn eval_r(code: & mut &str) -> String {
                 lines.push_str(r"    pop r1
     pop r0
     add r0, r1
+    push r0
+");
+            },
+            '-' => {
+                lines.push_str(r"    pop r1
+    pop r0
+    sub r0, r1
+    push r0
+");
+            },
+            '*' => {
+                lines.push_str(r"    pop r1
+    pop r0
+    mul r0, r1
+    push r0
+");
+            },
+            '/' => {
+                lines.push_str(r"    pop r1
+    pop r0
+    div r0, r1
     push r0
 ");
             },
@@ -130,6 +151,33 @@ fn test_compiler_compile() {
     pop r1
     pop r0
     add r0, r1
+    push r0
+");
+        assert_eq!(eval("1 2 -"), r"    mov r0, 1
+    push r0
+    mov r0, 2
+    push r0
+    pop r1
+    pop r0
+    sub r0, r1
+    push r0
+");
+        assert_eq!(eval("1 2 *"), r"    mov r0, 1
+    push r0
+    mov r0, 2
+    push r0
+    pop r1
+    pop r0
+    mul r0, r1
+    push r0
+");
+        assert_eq!(eval("1 2 /"), r"    mov r0, 1
+    push r0
+    mov r0, 2
+    push r0
+    pop r1
+    pop r0
+    div r0, r1
     push r0
 ");
     }
