@@ -1,4 +1,6 @@
 use std::env;
+use std::fs;
+use std::io::{Write, Read, BufWriter, BufReader, copy};
 
 fn compile(input: &str) -> String {
 
@@ -103,7 +105,13 @@ fn main() {
     if args.len() == 1 {
         panic!("at least one arg is required")
     }
-    println!("{}",compile(args.get(1).unwrap()));
+    let assembly = compile(args.get(1).unwrap());
+
+    let mut f = fs::File::create("OUT.asm").unwrap();
+
+    f.write_all(assembly.as_bytes()).unwrap();
+
+    // println!("{}", assembly);
 }
 
 #[test]

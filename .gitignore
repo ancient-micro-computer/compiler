@@ -1,3 +1,4 @@
 /target
+/OUT.asm
 **/*.rs.bk
 .vscode/
