@@ -1,26 +1,20 @@
+#[macro_use]
+extern crate tera;
+
 use std::env;
 use std::fs;
 use std::io::Write;
+use tera::{Tera, Context};
+
 
 fn compile(input: &str) -> String {
+    let tera : Tera = compile_templates!("templates/*");
 
-    let mut assembly = String::new();
-    assembly.push_str(r".ORG     $0000	// IPLエリア
-         call	_MAIN
-         halt
-
-.ORG     $1000	// ユーザエリア
-_MAIN:
-");
-    assembly.push_str(&eval(input));
-    assembly.push_str(r"
-    pop r0
-    mov r1, $2000
-    mov *(r1), r0
-    ret
-");
-    assembly
+    let mut context = Context::new();
+    context.insert("main", &eval(input));
+    tera.render("main.asm", &context).unwrap()
 }
+
 fn eval(input: &str) -> String {
     let mut code = input;
     let mut code = & mut code;
@@ -31,93 +25,65 @@ fn eval_r(code: & mut &str) -> String {
     if code.len() < 1 {
         return String::new();
     }
-    // FIXME
     let mut lines = String::new();
-
     let mut chars = code.chars();
-
     let mut pos: usize = 0;
-
-    let first_char = chars.next().unwrap();
-
+    let first_char = chars.next().unwrap();    
     pos += 1;
 
     let mut num;
+    let tera : Tera = compile_templates!("templates/*");
 
-    if first_char.is_digit(10) {
-        num = first_char.to_digit(10).unwrap();
+    let mut context = Context::new();
+    match first_char {
+        '0'...'9' => {
+            num = first_char.to_digit(10).unwrap();
 
-        for c in chars {
-            if let Some(digit) = c.to_digit(10) {
-                pos += 1;
-                num = digit + num * 10;
-            } else {
-                break;
+            for c in chars {
+                if let Some(digit) = c.to_digit(10) {
+                    pos += 1;
+                    num = digit + num * 10;
+                } else {
+                    break;
+                }
             }
+            lines.push_str(&format!("    mov r0, {}\n", num));
+            lines.push_str("    push r0\n");
+
+        },
+        ' ' => {
+            //do nothing
         }
-        lines.push_str(&format!("    mov r0, {}\n", num));
-        lines.push_str("    push r0\n");
-        *code = &code[pos..];
-        lines.push_str(&eval_r(code))
-    } else {
-        match first_char {
-            ' ' => {
-                //do nothing
-            }
-            '+' => {
-                lines.push_str(r"    pop r1
-    pop r0
-    add r0, r1
-    push r0
-");
-            },
-            '-' => {
-                lines.push_str(r"    pop r1
-    pop r0
-    sub r0, r1
-    push r0
-");
-            },
-            '*' => {
-                lines.push_str(r"    pop r1
-    pop r0
-    mul r0, r1
-    push r0
-");
-            },
-            '/' => {
-                lines.push_str(r"    pop r1
-    pop r0
-    div r0, r1
-    push r0
-");
-            },
-            x => {
-               panic!("Invalid token: {:?}", x); 
-            }
+        '+' => {
+            context.insert("ope", "add");
+            lines.push_str(&tera.render("operator.asm", &context).unwrap());
+            pos += 1
+        },
+        '-' => {
+            context.insert("ope", "sub");
+            lines.push_str(&tera.render("operator.asm", &context).unwrap());
+            pos += 1
+        },
+        '*' => {
+            context.insert("ope", "mul");
+            lines.push_str(&tera.render("operator.asm", &context).unwrap());
+            pos += 1
+        },
+        '/' => {
+            context.insert("ope", "div");
+            lines.push_str(&tera.render("operator.asm", &context).unwrap());
+            pos += 1
+        },
+        x => {
+            panic!("Invalid token: {:?}", x); 
         }
-        *code = &code[1..];
-        lines.push_str(&eval_r(code))
     }
-
-    // for c in chars {
-    //     match c {
-    //         ' ' => {
-    //             // do nothing
-    //         },
-    //         '+' | '-' | '*' | '/' => {
-    //             println!("{}", c);
-    //         },
-    //         '0'...'9' => {
-    //             lines.push("mov r0, {}");
-    //             lines.push("push r0");
-    //         },
-    //         x => {
-    //             panic!("Invalid token: {:?}", x);
-    //         },
-    //     }
-    // }
-
+    if pos < code.len() {
+        *code = &code[pos..];
+        lines.push_str(&eval_r(code));
+    } else {
+        //do nothing (it means end of string)
+    }
     lines
 }
 
