@@ -11,7 +11,12 @@ fn compile(input: &str) -> String {
 _MAIN:
 ");
     assembly.push_str(&eval(input));
-    assembly.push_str("    ret\n");
+    assembly.push_str(r"
+    pop r0
+    mov r1, $2000
+    mov *(r1), r0
+    ret
+");
     assembly
 }
 fn eval(input: &str) -> String {
