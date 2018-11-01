@@ -51,9 +51,9 @@ fn eval_r(code: & mut &str) -> String {
             lines.push_str("    push r0\n");
 
         },
-        ' ' => {
+        ' ' | '\n' => {
             //do nothing
-        }
+        },
         '+' => {
             context.insert("ope", "add");
             lines.push_str(&tera.render("operator.asm", &context).unwrap());
