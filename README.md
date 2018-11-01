@@ -1,6 +1,6 @@
 ## Quickstart
 
 ```rs
-cargo run '1 2 + 3 4 * +'   # (1 + 2) + (3 * 4)
+cargo run <path_to_srcfile>
 # => `OUT.asm` will be created.
 ``

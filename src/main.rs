@@ -4,6 +4,7 @@ extern crate tera;
 use std::env;
 use std::fs;
 use std::io::Write;
+use std::io::prelude::*;
 use tera::Context;
 
 fn compile(input: &str) -> String {
@@ -91,7 +92,14 @@ fn main() {
     if args.len() == 1 {
         panic!("at least one arg is required")
     }
-    let assembly = compile(args.get(1).unwrap());
+
+    // read from srcfile
+    let srcfile = args.get(1).unwrap();
+    let mut file = fs::File::open(srcfile).unwrap();
+    let mut src = String::new();
+    file.read_to_string(&mut src).unwrap();
+
+    let assembly = compile(&src);
 
     let mut f = fs::File::create("OUT.asm").unwrap();
 
