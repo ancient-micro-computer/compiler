@@ -28,7 +28,7 @@ fn eval_r(code: & mut &str) -> String {
     let mut lines = String::new();
     let mut chars = code.chars();
     let mut pos: usize = 0;
-    let first_char = chars.next().unwrap();    
+    let first_char = chars.next().unwrap();
     pos += 1;
 
     let mut num;
@@ -75,7 +75,7 @@ fn eval_r(code: & mut &str) -> String {
             pos += 1
         },
         x => {
-            panic!("Invalid token: {:?}", x); 
+            panic!("Invalid token: {:?}", x);
         }
     }
     if pos < code.len() {
