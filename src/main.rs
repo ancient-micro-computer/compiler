@@ -4,11 +4,10 @@ extern crate tera;
 use std::env;
 use std::fs;
 use std::io::Write;
-use tera::{Tera, Context};
-
+use tera::Context;
 
 fn compile(input: &str) -> String {
-    let tera : Tera = compile_templates!("templates/*");
+    let tera = compile_templates!("templates/*");
 
     let mut context = Context::new();
     context.insert("main", &eval(input));
@@ -32,7 +31,7 @@ fn eval_r(code: & mut &str) -> String {
     pos += 1;
 
     let mut num;
-    let tera : Tera = compile_templates!("templates/*");
+    let tera = compile_templates!("templates/*");
 
     let mut context = Context::new();
     match first_char {
