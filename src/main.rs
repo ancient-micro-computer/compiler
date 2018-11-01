@@ -1,6 +1,6 @@
 use std::env;
 use std::fs;
-use std::io::{Write, Read, BufWriter, BufReader, copy};
+use std::io::Write;
 
 fn compile(input: &str) -> String {
 
@@ -42,12 +42,12 @@ fn eval_r(code: & mut &str) -> String {
 
     pos += 1;
 
-    let mut num = 0;
+    let mut num;
 
     if first_char.is_digit(10) {
         num = first_char.to_digit(10).unwrap();
 
-        for (i, c) in chars.enumerate() {
+        for c in chars {
             if let Some(digit) = c.to_digit(10) {
                 pos += 1;
                 num = digit + num * 10;
