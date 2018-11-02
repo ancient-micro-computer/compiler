@@ -1,5 +1,6 @@
 /target
 /OUT.asm
+/OUT.dat
 **/*.rs.bk
 .vscode/
 /info.log
