@@ -4,3 +4,5 @@
 **/*.rs.bk
 .vscode/
 /info.log
+assembler
+vcpu
