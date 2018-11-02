@@ -7,6 +7,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "ancient-tc"
+version = "0.1.0"
+dependencies = [
+ "tera 0.11.19 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "arrayref"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -64,13 +71,6 @@ dependencies = [
  "num-integer 0.1.39 (registry+https://github.com/rust-lang/crates.io-index)",
  "num-traits 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "time 0.1.40 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "compiler"
-version = "0.1.0"
-dependencies = [
- "tera 0.11.19 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
