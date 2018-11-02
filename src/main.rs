@@ -159,8 +159,8 @@ fn main() {
 
 #[test]
 fn test_compiler_compile() {
-    {
-        assert_eq!(eval("M[1]"), r"M:
+
+    assert_eq!(eval("M[1]"), r"M:
     mov r0, 1
     push r0
     pop r14
@@ -169,7 +169,8 @@ fn test_compiler_compile() {
     push r15
     ret
 ");
-        assert_eq!(eval("M[12]"), r"M:
+
+    assert_eq!(eval("M[12]"), r"M:
     mov r0, 12
     push r0
     pop r14
@@ -178,7 +179,8 @@ fn test_compiler_compile() {
     push r15
     ret
 ");
-        assert_eq!(eval("M[1 2 +]"), r"M:
+
+    assert_eq!(eval("M[1 2 +]"), r"M:
     mov r0, 1
     push r0
     mov r0, 2
@@ -193,7 +195,8 @@ fn test_compiler_compile() {
     push r15
     ret
 ");
-        assert_eq!(eval("M[1 2 -]"), r"M:
+
+    assert_eq!(eval("M[1 2 -]"), r"M:
     mov r0, 1
     push r0
     mov r0, 2
@@ -208,7 +211,8 @@ fn test_compiler_compile() {
     push r15
     ret
 ");
-        assert_eq!(eval("M[1 2 *]"), r"M:
+
+    assert_eq!(eval("M[1 2 *]"), r"M:
     mov r0, 1
     push r0
     mov r0, 2
@@ -223,7 +227,8 @@ fn test_compiler_compile() {
     push r15
     ret
 ");
-        assert_eq!(eval("M[1 2 /]"), r"M:
+
+    assert_eq!(eval("M[1 2 /]"), r"M:
     mov r0, 1
     push r0
     mov r0, 2
@@ -239,7 +244,7 @@ fn test_compiler_compile() {
     ret
 ");
 
-        assert_eq!(eval("M[1 2 / P]"), r"M:
+    assert_eq!(eval("M[1 2 / P]"), r"M:
     mov r0, 1
     push r0
     mov r0, 2
@@ -255,7 +260,8 @@ fn test_compiler_compile() {
     push r15
     ret
 ");
-         assert_eq!(eval("Q[. . +] M[1 Q]"),r"Q:
+
+    assert_eq!(eval("Q[. . +] M[1 Q]"),r"Q:
     push r8
     push r8
     pop r1
@@ -278,7 +284,8 @@ M:
     push r15
     ret
 ");
-         assert_eq!(eval("Q[. . +]\nM[1 Q]"),r"Q:
+
+    assert_eq!(eval("Q[. . +]\nM[1 Q]"),r"Q:
     push r8
     push r8
     pop r1
@@ -301,7 +308,8 @@ M:
     push r15
     ret
 ");
-         assert_eq!(eval("Q[2 . +] M[1 Q]"),r"Q:
+
+    assert_eq!(eval("Q[2 . +] M[1 Q]"),r"Q:
     mov r0, 2
     push r0
     push r8
@@ -325,7 +333,8 @@ M:
     push r15
     ret
 ");
-         assert_eq!(eval("F[a b +] M[1 2 F]"),r"F:
+
+    assert_eq!(eval("F[a b +] M[1 2 F]"),r"F:
     push r8
     push r9
     pop r1
@@ -351,5 +360,5 @@ M:
     push r15
     ret
 ");
-    }
+
 }
