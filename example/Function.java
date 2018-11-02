@@ -4,7 +4,6 @@ public class Function {
     }
 
     public static void main(String[] args) {
-        function(1, 1);
-        System.out.println(function(1, 2));
+        System.out.println(function(3, 2));
     }
 }
