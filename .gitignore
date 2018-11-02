@@ -2,3 +2,4 @@
 /OUT.asm
 **/*.rs.bk
 .vscode/
+/info.log

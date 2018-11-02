@@ -73,6 +73,9 @@ fn eval_r(code: & mut &str) -> String {
         'M' => {
             lines.push_str("M");
         },
+        'P' => {
+            lines.push_str("    call P\n");
+        },
         '[' => {
             lines.push_str(":\n");
         },
@@ -168,6 +171,19 @@ fn test_compiler_compile() {
     pop r0
     div r0, r1
     push r0
+    ret
+");
+
+        assert_eq!(eval("M[1 2 / P]"), r"M:
+    mov r0, 1
+    push r0
+    mov r0, 2
+    push r0
+    pop r1
+    pop r0
+    div r0, r1
+    push r0
+    call P
     ret
 ");
     //     assert_eq!(eval(""),r"    mov r0, 1

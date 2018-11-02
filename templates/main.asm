@@ -4,8 +4,9 @@
 
 .ORG     $1000    // ユーザエリア
 
-{{ func }}
-
 {{ main }}
 
-
+P:
+   mov r1, $200
+   mov *(r1), r0
+   ret
