@@ -57,26 +57,31 @@ fn eval_r(code: & mut &str) -> String {
         '+' => {
             context.insert("ope", "add");
             lines.push_str(&tera.render("operator.asm", &context).unwrap());
-            pos += 1
         },
         '-' => {
             context.insert("ope", "sub");
             lines.push_str(&tera.render("operator.asm", &context).unwrap());
-            pos += 1
         },
         '*' => {
             context.insert("ope", "mul");
             lines.push_str(&tera.render("operator.asm", &context).unwrap());
-            pos += 1
         },
         '/' => {
             context.insert("ope", "div");
             lines.push_str(&tera.render("operator.asm", &context).unwrap());
-            pos += 1
+        },
+        'M' => {
+            lines.push_str("M");
+        },
+        '[' => {
+            lines.push_str(":\n");
+        },
+        ']' => {
+            lines.push_str("    ret\n");
         },
         x => {
             panic!("Invalid token: {:?}", x);
-        }
+        },
     }
     if pos < code.len() {
         *code = &code[pos..];
@@ -111,13 +116,18 @@ fn main() {
 #[test]
 fn test_compiler_compile() {
     {
-        assert_eq!(eval("1"), r"    mov r0, 1
+        assert_eq!(eval("M[1]"), r"M:
+    mov r0, 1
     push r0
+    ret
 ");
-        assert_eq!(eval("12"), r"    mov r0, 12
+        assert_eq!(eval("M[12]"), r"M:
+    mov r0, 12
     push r0
+    ret
 ");
-        assert_eq!(eval("1 2 +"), r"    mov r0, 1
+        assert_eq!(eval("M[1 2 +]"), r"M:
+    mov r0, 1
     push r0
     mov r0, 2
     push r0
@@ -125,8 +135,10 @@ fn test_compiler_compile() {
     pop r0
     add r0, r1
     push r0
+    ret
 ");
-        assert_eq!(eval("1 2 -"), r"    mov r0, 1
+        assert_eq!(eval("M[1 2 -]"), r"M:
+    mov r0, 1
     push r0
     mov r0, 2
     push r0
@@ -134,8 +146,10 @@ fn test_compiler_compile() {
     pop r0
     sub r0, r1
     push r0
+    ret
 ");
-        assert_eq!(eval("1 2 *"), r"    mov r0, 1
+        assert_eq!(eval("M[1 2 *]"), r"M:
+    mov r0, 1
     push r0
     mov r0, 2
     push r0
@@ -143,8 +157,10 @@ fn test_compiler_compile() {
     pop r0
     mul r0, r1
     push r0
+    ret
 ");
-        assert_eq!(eval("1 2 /"), r"    mov r0, 1
+        assert_eq!(eval("M[1 2 /]"), r"M:
+    mov r0, 1
     push r0
     mov r0, 2
     push r0
@@ -152,6 +168,20 @@ fn test_compiler_compile() {
     pop r0
     div r0, r1
     push r0
+    ret
 ");
+    //     assert_eq!(eval(""),r"    mov r0, 1
+    // push r0
+    // call F
+    // F:
+    //     pop r7
+    //     push r7
+    //     push r7
+    //     pop r1
+    //     pop r0
+    //     add r0, r1
+    //     push r0
+    //     ret
+    //     ")
     }
 }

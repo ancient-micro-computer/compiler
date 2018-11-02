@@ -1,11 +1,11 @@
 .ORG     $0000    // IPLエリア
-         call    _MAIN
+         call    M
          halt
 
 .ORG     $1000    // ユーザエリア
-_MAIN:
+
+{{ func }}
+
 {{ main }}
-    pop r0
-    mov r1, $200
-    mov *(r1), r0
-    ret
+
+
