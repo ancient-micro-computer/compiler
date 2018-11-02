@@ -1,3 +1,4 @@
+/example/*.class
 /target
 /OUT.asm
 /OUT.dat
