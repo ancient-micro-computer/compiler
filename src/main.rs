@@ -70,14 +70,27 @@ fn eval_r(code: & mut &str) -> String {
             context.insert("ope", "div");
             lines.push_str(&tera.render("operator.asm", &context).unwrap());
         },
-        'M' => {
-            lines.push_str("M");
+        'A'...'O' | 'Q'...'Z' => {
+            let c = chars.next().unwrap();
+            match c {
+                '[' => {
+                    lines.push_str(&first_char.to_string());
+                    lines.push_str(":\n");
+                    pos += 1;
+                },
+                _ => {
+                    lines.push_str("    pop r8\n");
+                    lines.push_str("    call ");
+                    lines.push_str(&first_char.to_string());
+                    lines.push_str("\n");
+                }
+            } 
+        },
+        '.' => {
+            lines.push_str("    push r8\n");
         },
         'P' => {
             lines.push_str("    call P\n");
-        },
-        '[' => {
-            lines.push_str(":\n");
         },
         ']' => {
             lines.push_str("    ret\n");
@@ -186,18 +199,20 @@ fn test_compiler_compile() {
     call P
     ret
 ");
-    //     assert_eq!(eval(""),r"    mov r0, 1
-    // push r0
-    // call F
-    // F:
-    //     pop r7
-    //     push r7
-    //     push r7
-    //     pop r1
-    //     pop r0
-    //     add r0, r1
-    //     push r0
-    //     ret
-    //     ")
+         assert_eq!(eval("Q[. . +] M[1 Q]"),r"Q:
+    push r8
+    push r8
+    pop r1
+    pop r0
+    add r0, r1
+    push r0
+    ret
+M:
+    mov r0, 1
+    push r0
+    pop r8
+    call Q
+    ret
+");
     }
 }
