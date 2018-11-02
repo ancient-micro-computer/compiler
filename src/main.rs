@@ -84,7 +84,7 @@ fn eval_r(code: & mut &str) -> String {
                     lines.push_str(&first_char.to_string());
                     lines.push_str("\n");
                 }
-            } 
+            }
         },
         '.' => {
             lines.push_str("    push r8\n");
@@ -93,6 +93,10 @@ fn eval_r(code: & mut &str) -> String {
             lines.push_str("    call P\n");
         },
         ']' => {
+            lines.push_str("    pop r14\n");
+            lines.push_str("    pop r15\n");
+            lines.push_str("    push r14\n");
+            lines.push_str("    push r15\n");
             lines.push_str("    ret\n");
         },
         x => {
