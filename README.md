@@ -10,3 +10,5 @@ Example
 ```
 cargo run ./example/arithmetic.tl
 ``
+
+test
